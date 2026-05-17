@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://d1ghurvinaus5"]
+
+[ext_resource type="Texture2D" uid="uid://bv38roadvpmte" path="res://Sprites/icon.svg" id="1_bt8rg"]
+
+[sub_resource type="GDScript" id="GDScript_bt8rg"]
+resource_name = "res://Inimigos/projetil.gd"
+script/source = "extends Area2D
+
+@export var speed: float = 200
+@export var damage: int = 10
+var direction := Vector2.ZERO
+
+func _physics_process(delta: float) -> void:
+	position += direction*speed*delta
+	
+func set_direction(dir: Vector2):
+	direction = dir
+
+func _on_body_entered(body: Node2D) -> void:
+	if body.has_method(\"take_damage\"):
+		body.take_damage(damage)
+	
+	queue_free()
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_skax5"]
+size = Vector2(29, 28)
+
+[node name="Area2D" type="Area2D" unique_id=14068653]
+script = SubResource("GDScript_bt8rg")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1167876869]
+modulate = Color(0.02745098, 1, 0.5803922, 1)
+self_modulate = Color(1, 1, 0.7764706, 1)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_bt8rg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1801932335]
+position = Vector2(-0.5, 0)
+shape = SubResource("RectangleShape2D_skax5")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://b2dud732pf37b"]
+
+[node name="CanvasLayer" type="CanvasLayer" unique_id=899912671]
+
+[node name="ColorRect_Background" type="ColorRect" parent="." unique_id=553381290]
+anchors_preset = -1
+offset_right = 400.0
+offset_bottom = 40.0
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRect_Fill" type="ColorRect" parent="." unique_id=263105928]
+offset_right = 400.0
+offset_bottom = 40.0

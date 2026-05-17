@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://be3byal4m5r5x"]
+
+[ext_resource type="Script" uid="uid://djrmc805qon6s" path="res://Itens/Chave_Zelador.gd" id="1_o52oo"]
+[ext_resource type="Texture2D" uid="uid://bv38roadvpmte" path="res://Sprites/icon.svg" id="2_dd6dx"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_osjce"]
+radius = 33.734257
+
+[node name="Chave do Zelador" type="Area2D" unique_id=422973524]
+script = ExtResource("1_o52oo")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=155774470]
+modulate = Color(1.6099998, 1.5294299, 1.4527993, 1)
+self_modulate = Color(1.9896108, 1.9896108, 1.9896108, 1)
+scale = Vector2(0.421875, 0.40625003)
+texture = ExtResource("2_dd6dx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=221013600]
+shape = SubResource("CircleShape2D_osjce")

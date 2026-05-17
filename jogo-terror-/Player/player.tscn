@@ -1,0 +1,115 @@
+[gd_scene format=3 uid="uid://dhq68wmembfnw"]
+
+[ext_resource type="Texture2D" uid="uid://bv38roadvpmte" path="res://Sprites/icon.svg" id="1_l8h54"]
+
+[sub_resource type="GDScript" id="GDScript_l8h54"]
+resource_name = "player.gd"
+script/source = "extends CharacterBody2D
+
+var speed = 300
+var motion = Vector2()
+
+
+#var para rotação
+var rotation_speed = 500.0
+var rotation_angle = 0.0
+var max_angle = 180.0
+var is_flipping = false
+var target_scale_x = 1.0
+var sprite_node
+# variaveis da vida
+var current_health: int = 0
+var max_health: int = 3
+
+@onready var health_bar_fill = $\"../CanvasLayer/ColorRect_Fill\"
+@onready var health_bar_background = $\"../CanvasLayer/ColorRect_Background\"
+
+# _ready chamado quando a cena é carregada
+func _ready() -> void:
+	sprite_node = $Sprite2D
+	current_health = max_health
+	update_health_bar()
+
+
+func get_input():
+	motion = Vector2()
+	
+	if Input.is_action_pressed(\"ui_left\"): 
+		motion.x -= 1
+	if Input.is_action_pressed(\"ui_right\"): 
+		motion.x += 1
+	if Input.is_action_pressed(\"ui_up\"): 
+		motion.y -= 1
+	if Input.is_action_pressed(\"ui_down\"): 
+		motion.y += 1
+		
+	motion = motion.normalized()*speed
+	
+	if Input.is_action_just_pressed(\"Damage\"):
+		take_damage(1)
+		print(current_health)
+	
+	if Input.is_action_just_pressed(\"Heal\"):
+		heal(1)
+		print(current_health)
+		
+		
+	
+func flip_chara(delta):
+	if is_flipping:
+		rotation_angle += rotation_speed*delta
+		sprite_node.scale.x = cos(deg_to_rad(rotation_angle))*target_scale_x
+	if rotation_angle >= max_angle:
+		is_flipping = false
+		rotation_angle = 0
+		sprite_node.scale.x = target_scale_x
+		
+func _process(delta: float) -> void:
+	get_input()
+	
+	if not is_flipping:
+		velocity = motion
+		move_and_slide()
+	if is_flipping:
+		flip_chara(delta)
+	
+func take_damage(amount: int):
+	current_health -= amount
+	current_health = clamp(current_health, 0 , max_health)
+	update_health_bar()
+	
+func heal(amount: int):
+	current_health += amount
+	current_health = clamp(current_health, 0 , max_health)
+	update_health_bar()
+	
+func update_health_bar():
+	var ratio = float (current_health)/max_health
+	health_bar_fill.scale.x = ratio
+	
+	if ratio > 0.6:
+		health_bar_fill.color = Color(0.0, 1.0, 0.0, 1.0)
+	elif ratio > 0.3:
+		health_bar_fill.color = Color(1.0, 1.0, 0.0, 1.0)
+	else:
+		health_bar_fill.color = Color(1.0, 0.0, 0.0, 1.0)
+	
+	if ratio <= 0:
+		queue_free()
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4ntmi"]
+size = Vector2(94, 94)
+
+[node name="Player" type="CharacterBody2D" unique_id=567172382 groups=["Player"]]
+collision_mask = 3
+script = SubResource("GDScript_l8h54")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=719679829]
+position = Vector2(-4.7683716e-07, 2.842171e-14)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("1_l8h54")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1314836824]
+scale = Vector2(0.8, 0.8)
+shape = SubResource("RectangleShape2D_4ntmi")
